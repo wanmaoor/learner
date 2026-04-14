@@ -1,0 +1,251 @@
+{
+  "description": "20 real high school math error patterns for boundary detection validation",
+  "test_part_a": {
+    "description": "Boundary identification: can the LLM identify the SPECIFIC failure mode?",
+    "cases": [
+      {
+        "id": 1,
+        "topic": "导数.复合函数求导",
+        "question": "求 f(x) = sin(x²) 的导数",
+        "student_answer": "f'(x) = cos(x²)",
+        "correct_answer": "f'(x) = 2x·cos(x²)",
+        "expected_boundary": "忘记对内层函数求导（链式法则遗漏内层）"
+      },
+      {
+        "id": 2,
+        "topic": "导数.复合函数求导",
+        "question": "求 f(x) = ln(2x+1) 的导数",
+        "student_answer": "f'(x) = 1/(2x+1)",
+        "correct_answer": "f'(x) = 2/(2x+1)",
+        "expected_boundary": "忘记对内层函数求导（链式法则遗漏内层）"
+      },
+      {
+        "id": 3,
+        "topic": "导数.复合函数求导",
+        "question": "求 f(x) = e^(3x) 的导数",
+        "student_answer": "f'(x) = 3·e^(3x-1)",
+        "correct_answer": "f'(x) = 3·e^(3x)",
+        "expected_boundary": "混淆幂函数求导规则和指数函数求导规则"
+      },
+      {
+        "id": 4,
+        "topic": "函数.二次函数求最值",
+        "question": "f(x) = x² - 2ax + 1 在 [0,2] 上的最小值，a>0",
+        "student_answer": "最小值 = f(a) = 1-a²，不分类讨论",
+        "correct_answer": "需要分 a<0, 0≤a≤2, a>2 三种情况讨论",
+        "expected_boundary": "含参二次函数求最值时不进行分类讨论（对称轴可能在区间外）"
+      },
+      {
+        "id": 5,
+        "topic": "函数.二次函数求最值",
+        "question": "f(x) = -x² + 4x - 3 在 [0,5] 上的最大值",
+        "student_answer": "代入端点 f(0)=-3, f(5)=-8，最大值为-3",
+        "correct_answer": "顶点 x=2 在区间内，f(2)=1，最大值为1",
+        "expected_boundary": "只检查端点不检查顶点（忘记二次函数可能在区间内取极值）"
+      },
+      {
+        "id": 6,
+        "topic": "三角函数.诱导公式",
+        "question": "求 sin(π + α) 的值，已知 sinα = 3/5",
+        "student_answer": "sin(π + α) = sinα = 3/5",
+        "correct_answer": "sin(π + α) = -sinα = -3/5",
+        "expected_boundary": "诱导公式符号错误（第三象限正弦为负）"
+      },
+      {
+        "id": 7,
+        "topic": "三角函数.正弦定理",
+        "question": "△ABC中，a=2, A=30°, B=45°，求b",
+        "student_answer": "b = a·sinB/sinA = 2·sin45°/sin30° = 2·(√2/2)/(1/2) = 2√2",
+        "correct_answer": "b = 2√2",
+        "expected_boundary": null,
+        "note": "学生答对了，用于测试LLM能否正确判断无边界（已掌握）"
+      },
+      {
+        "id": 8,
+        "topic": "概率.古典概型",
+        "question": "从1-10中随机取2个数，两数之和为偶数的概率",
+        "student_answer": "奇数5个偶数5个，两偶或两奇：C(5,2)+C(5,2) = 20，总共C(10,2)=45，P=20/45=4/9",
+        "correct_answer": "P = (C(5,2)+C(5,2))/C(10,2) = 20/45 = 4/9",
+        "expected_boundary": null,
+        "note": "学生答对了"
+      },
+      {
+        "id": 9,
+        "topic": "概率.条件概率",
+        "question": "袋中3红2白球，不放回取2次，第一次红色的条件下第二次也是红色的概率",
+        "student_answer": "P = 3/5 × 3/5 = 9/25",
+        "correct_answer": "P(第二次红|第一次红) = 2/4 = 1/2",
+        "expected_boundary": "不放回抽样当作放回处理（不理解条件概率改变了样本空间）"
+      },
+      {
+        "id": 10,
+        "topic": "数列.等差数列求和",
+        "question": "等差数列{an}，a1=2, d=3, 求S10",
+        "student_answer": "S10 = 10×2 + 10×9/2 × 3 = 20 + 135 = 155",
+        "correct_answer": "S10 = 10×2 + 10×(10-1)/2 × 3 = 20 + 135 = 155",
+        "expected_boundary": null,
+        "note": "学生答对了，过程也对"
+      },
+      {
+        "id": 11,
+        "topic": "数列.等比数列",
+        "question": "等比数列首项a1=1，公比q=-2，求S5",
+        "student_answer": "S5 = (1-(-2)^5)/(1-(-2)) = (1+32)/3 = 11",
+        "correct_answer": "S5 = (1-(-2)^5)/(1-(-2)) = (1-(-32))/(1+2) = 33/3 = 11",
+        "expected_boundary": null,
+        "note": "学生答对了"
+      },
+      {
+        "id": 12,
+        "topic": "不等式.均值不等式",
+        "question": "x>0时，求 x + 4/x 的最小值",
+        "student_answer": "由均值不等式 x + 4/x ≥ 2√(x·4/x) = 4，等号在x=4/x即x=2时成立",
+        "correct_answer": "最小值为4，当x=2时取等",
+        "expected_boundary": null,
+        "note": "答对了"
+      },
+      {
+        "id": 13,
+        "topic": "不等式.均值不等式",
+        "question": "x>0时，求 2x + 1/x + 1 的最小值",
+        "student_answer": "2x + 1/x + 1 ≥ 2√(2x·1/x) + 1 = 2√2 + 1",
+        "correct_answer": "2x + 1/x ≥ 2√(2x·1/x) = 2√2，所以最小值 = 2√2+1，等号在2x=1/x即x=√2/2时成立",
+        "expected_boundary": null,
+        "note": "答对了，学生正确处理了常数项"
+      },
+      {
+        "id": 14,
+        "topic": "不等式.均值不等式",
+        "question": "x>1时，求 x + 4/(x-1) 的最小值",
+        "student_answer": "x + 4/(x-1) ≥ 2√(4x/(x-1))... 算不下去了，最小值=4",
+        "correct_answer": "令t=x-1>0，原式=(t+1)+4/t = t+4/t+1 ≥ 2√4+1 = 5，等号t=2即x=3",
+        "expected_boundary": "不会使用换元法处理非标准均值不等式（被减数不是乘积关系时不知道如何凑）"
+      },
+      {
+        "id": 15,
+        "topic": "立体几何.线面关系",
+        "question": "直线l⊥平面α，直线m在平面α内，则l与m的关系是？",
+        "student_answer": "l⊥m",
+        "correct_answer": "l⊥m",
+        "expected_boundary": null,
+        "note": "答对了"
+      },
+      {
+        "id": 16,
+        "topic": "立体几何.二面角",
+        "question": "正方体ABCD-A'B'C'D'中，求二面角A-BD'-C的大小",
+        "student_answer": "取BD'中点M，连AM、CM... 然后错误地认为AM⊥BD'",
+        "correct_answer": "建系法或向量法求得cos值",
+        "expected_boundary": "用几何法求二面角时错误判断垂直关系（不验证垂直条件就假设垂直）"
+      },
+      {
+        "id": 17,
+        "topic": "解析几何.直线与圆",
+        "question": "圆x²+y²=4与直线y=x+m相切，求m",
+        "student_answer": "圆心(0,0)到直线距离=半径，|m|/√2 = 4，m=±4√2",
+        "correct_answer": "|m|/√2 = 2，m=±2√2",
+        "expected_boundary": "混淆半径和半径的平方（r²=4时误以为r=4）"
+      },
+      {
+        "id": 18,
+        "topic": "解析几何.椭圆",
+        "question": "椭圆 x²/4 + y²/3 = 1 的离心率",
+        "student_answer": "a²=4, b²=3, c²=a²+b²=7, e=√7/2",
+        "correct_answer": "c²=a²-b²=1, c=1, e=1/2",
+        "expected_boundary": "椭圆中用c²=a²+b²（双曲线公式）而非c²=a²-b²"
+      },
+      {
+        "id": 19,
+        "topic": "导数.导数应用.单调性",
+        "question": "f(x)=x³-3x，求单调递减区间",
+        "student_answer": "f'(x)=3x²-3=3(x+1)(x-1)，f'(x)<0时x<-1或x>1，递减区间(-∞,-1)∪(1,+∞)",
+        "correct_answer": "f'(x)<0 ⟹ -1<x<1，递减区间(-1,1)",
+        "expected_boundary": "解一元二次不等式符号方向搞反（开口向上的抛物线<0应取两根之间）"
+      },
+      {
+        "id": 20,
+        "topic": "导数.导数应用.极值",
+        "question": "f(x)=x³-3x²+1，求极大值",
+        "student_answer": "f'(x)=3x²-6x=3x(x-2)=0，x=0或x=2，f(0)=1，f(2)=-3，极大值为1",
+        "correct_answer": "x=0是极大值点，f(0)=1，极大值为1",
+        "expected_boundary": null,
+        "note": "答对了，正确判断了极大值点"
+      }
+    ]
+  },
+  "test_part_b": {
+    "description": "Boundary matching: can the LLM judge whether two errors represent the SAME failure pattern?",
+    "pairs": [
+      {
+        "pair_id": 1,
+        "error_a": { "case_id": 1, "summary": "sin(x²)求导忘记乘内层导数2x" },
+        "error_b": { "case_id": 2, "summary": "ln(2x+1)求导忘记乘内层导数2" },
+        "expected_match": true,
+        "expected_pattern": "链式法则遗漏内层函数导数"
+      },
+      {
+        "pair_id": 2,
+        "error_a": { "case_id": 1, "summary": "sin(x²)求导忘记乘内层导数" },
+        "error_b": { "case_id": 3, "summary": "e^(3x)求导时用了幂函数规则" },
+        "expected_match": false,
+        "expected_reason": "一个是遗漏内层导数，一个是混淆求导规则类型"
+      },
+      {
+        "pair_id": 3,
+        "error_a": { "case_id": 4, "summary": "含参二次函数不分类讨论" },
+        "error_b": { "case_id": 5, "summary": "二次函数只检查端点不检查顶点" },
+        "expected_match": false,
+        "expected_reason": "一个是参数讨论缺失，一个是极值点检查缺失，虽然都是二次函数但失败模式不同"
+      },
+      {
+        "pair_id": 4,
+        "error_a": { "case_id": 17, "summary": "r²=4误以为r=4" },
+        "error_b": { "case_id": 18, "summary": "椭圆用c²=a²+b²而非c²=a²-b²" },
+        "expected_match": false,
+        "expected_reason": "一个是平方根计算错误，一个是公式记忆错误"
+      },
+      {
+        "pair_id": 5,
+        "error_a": { "case_id": 6, "summary": "sin(π+α)符号判断错误" },
+        "error_b": { "case_id": 19, "summary": "一元二次不等式解集方向搞反" },
+        "expected_match": false,
+        "expected_reason": "完全不同的知识点和错误类型"
+      },
+      {
+        "pair_id": 6,
+        "error_a": { "case_id": 14, "summary": "非标准均值不等式不会换元" },
+        "error_b": { "case_id": 4, "summary": "含参二次函数不分类讨论" },
+        "expected_match": false,
+        "expected_reason": "不同的知识点，虽然都涉及代数变换技巧"
+      },
+      {
+        "pair_id": 7,
+        "error_a": { "case_id": 9, "summary": "不放回抽样当放回处理" },
+        "error_b": { "case_id": 9, "summary": "不放回取球概率计算用了独立事件公式" },
+        "expected_match": true,
+        "expected_pattern": "不理解条件概率对样本空间的影响"
+      },
+      {
+        "pair_id": 8,
+        "error_a": { "case_id": 16, "summary": "未验证垂直就假设垂直" },
+        "error_b": { "case_id": 5, "summary": "只查端点不查顶点" },
+        "expected_match": false,
+        "expected_reason": "不同科目的不同错误，虽然都有'遗漏检查'的共性但具体知识点无关"
+      },
+      {
+        "pair_id": 9,
+        "error_a": { "case_id": 3, "summary": "e^(3x)求导用幂函数规则降次" },
+        "error_b": { "case_id": 18, "summary": "椭圆用双曲线的c²公式" },
+        "expected_match": false,
+        "expected_reason": "不同知识点，虽然都是'公式混淆'但领域完全不同"
+      },
+      {
+        "pair_id": 10,
+        "error_a": { "case_id": 1, "summary": "复合函数sin(x²)求导遗漏内层" },
+        "error_b": { "case_id": 2, "summary": "复合函数ln(2x+1)求导遗漏内层" },
+        "expected_match": true,
+        "expected_pattern": "链式法则系统性遗漏"
+      }
+    ]
+  }
+}
