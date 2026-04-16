@@ -1,0 +1,21 @@
+{
+  "name": "Learner - AI 数学学习",
+  "short_name": "Learner",
+  "description": "精准检测知识边界，针对性突破弱点",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
